@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char big_array[1L << 24]; /* 16 MB */
-char huge_array[1L << 31]; /* 2 GB */
 int global = 0;
 
 int useless() { return 0; }
 
 int main ()
 {
+    void *big_array = malloc(1L << 24); /* 16 MB */
+    void *huge_array = malloc(1L << 31); /* 2 GB */
+    
     void *p1, *p2, *p3, *p4;
     int local = 0;
 
@@ -39,6 +40,8 @@ int main ()
     printf("Address allocated to p4: %p\n", p4);
 
     // Free allocated memory
+    free(big_array);
+    free(huge_array);
     free(p1);
     free(p2);
     free(p3);
