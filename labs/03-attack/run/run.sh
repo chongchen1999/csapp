@@ -1,0 +1,2 @@
+# ./../hex2raw < ctarget_l1/ctarget_l1.txt > ctarget_l1/ctarget_l1_raw.txt && ./../ctarget -q -i ctarget_l1/ctarget_l1_raw.txt
+./../hex2raw < ctarget_l2/ctarget_l2.txt > ctarget_l2/ctarget_l2_raw.txt && ./../ctarget -q -i ctarget_l2/ctarget_l2_raw.txt
