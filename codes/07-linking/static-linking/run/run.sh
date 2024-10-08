@@ -3,12 +3,12 @@ gcc -c ../addvec.c ../multvec.c  -Og
 # ar rcs libvector.a addvec.o multvec.o
 ar rcs libvector.a addvec.o multvec.o
 
-objdump -d libvector.a > libvector.disass
-objdump -d addvec.o > addvec.disass
-objdump -d multvec.o > multvec.disass
+objdump -dx libvector.a > libvector.d
+objdump -dx addvec.o > addvec.d
+objdump -dx multvec.o > multvec.d
 
 gcc -c ../main.c -Og
-objdump -d main.o > main.disass
+objdump -dx main.o > main.d
 # gcc -static -o prog main.o ./libvector.a
 gcc -static -o prog main.o -L. -lvector
-objdump -d prog > prog.disass
+objdump -dx prog > prog.d
