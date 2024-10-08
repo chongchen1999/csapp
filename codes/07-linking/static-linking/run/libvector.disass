@@ -1,0 +1,39 @@
+In archive libvector.a:
+
+addvec.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <addVec>:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	83 05 00 00 00 00 01 	addl   $0x1,0x0(%rip)        # b <addVec+0xb>
+   b:	b8 00 00 00 00       	mov    $0x0,%eax
+  10:	eb 12                	jmp    24 <addVec+0x24>
+  12:	4c 63 c0             	movslq %eax,%r8
+  15:	46 8b 0c 86          	mov    (%rsi,%r8,4),%r9d
+  19:	46 03 0c 87          	add    (%rdi,%r8,4),%r9d
+  1d:	46 89 0c 82          	mov    %r9d,(%rdx,%r8,4)
+  21:	83 c0 01             	add    $0x1,%eax
+  24:	39 c8                	cmp    %ecx,%eax
+  26:	7c ea                	jl     12 <addVec+0x12>
+  28:	c3                   	ret    
+
+multvec.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <multVec>:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	83 05 00 00 00 00 01 	addl   $0x1,0x0(%rip)        # b <multVec+0xb>
+   b:	b8 00 00 00 00       	mov    $0x0,%eax
+  10:	eb 13                	jmp    25 <multVec+0x25>
+  12:	4c 63 c0             	movslq %eax,%r8
+  15:	46 8b 0c 86          	mov    (%rsi,%r8,4),%r9d
+  19:	46 0f af 0c 87       	imul   (%rdi,%r8,4),%r9d
+  1e:	46 89 0c 82          	mov    %r9d,(%rdx,%r8,4)
+  22:	83 c0 01             	add    $0x1,%eax
+  25:	39 c8                	cmp    %ecx,%eax
+  27:	7c e9                	jl     12 <multVec+0x12>
+  29:	c3                   	ret    
