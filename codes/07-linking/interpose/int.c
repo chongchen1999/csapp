@@ -4,5 +4,5 @@
 int main() {
     int *p = malloc(32);
     free(p);
-    return(0);
+    return 0;
 }

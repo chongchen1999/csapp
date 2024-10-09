@@ -7,31 +7,30 @@ start address 0x0000000000000000
 
 Sections:
 Idx Name          Size      VMA               LMA               File off  Algn
-  0 .text         00000062  0000000000000000  0000000000000000  00000040  2**0
+  0 .text         00000083  0000000000000000  0000000000000000  00000040  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  1 .data         00000000  0000000000000000  0000000000000000  000000a2  2**0
+  1 .data         00000000  0000000000000000  0000000000000000  000000c3  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000000  0000000000000000  0000000000000000  000000a2  2**0
+  2 .bss          00000000  0000000000000000  0000000000000000  000000c3  2**0
                   ALLOC
-  3 .rodata.str1.1 0000001b  0000000000000000  0000000000000000  000000a2  2**0
+  3 .rodata       0000001b  0000000000000000  0000000000000000  000000c3  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  4 .comment      0000002c  0000000000000000  0000000000000000  000000bd  2**0
+  4 .comment      0000002c  0000000000000000  0000000000000000  000000de  2**0
                   CONTENTS, READONLY
-  5 .note.GNU-stack 00000000  0000000000000000  0000000000000000  000000e9  2**0
+  5 .note.GNU-stack 00000000  0000000000000000  0000000000000000  0000010a  2**0
                   CONTENTS, READONLY
-  6 .note.gnu.property 00000020  0000000000000000  0000000000000000  000000f0  2**3
+  6 .note.gnu.property 00000020  0000000000000000  0000000000000000  00000110  2**3
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .eh_frame     00000060  0000000000000000  0000000000000000  00000110  2**3
+  7 .eh_frame     00000058  0000000000000000  0000000000000000  00000130  2**3
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
 SYMBOL TABLE:
 0000000000000000 l    df *ABS*	0000000000000000 mymalloc.c
 0000000000000000 l    d  .text	0000000000000000 .text
-0000000000000000 l       .rodata.str1.1	0000000000000000 .LC0
-0000000000000011 l       .rodata.str1.1	0000000000000000 .LC1
-0000000000000000 g     F .text	000000000000003a __wrap_malloc
+0000000000000000 l    d  .rodata	0000000000000000 .rodata
+0000000000000000 g     F .text	0000000000000049 __wrap_malloc
 0000000000000000         *UND*	0000000000000000 __real_malloc
-0000000000000000         *UND*	0000000000000000 __printf_chk
-000000000000003a g     F .text	0000000000000028 __wrap_free
+0000000000000000         *UND*	0000000000000000 printf
+0000000000000049 g     F .text	000000000000003a __wrap_free
 0000000000000000         *UND*	0000000000000000 __real_free
 
 
@@ -41,45 +40,54 @@ Disassembly of section .text:
 0000000000000000 <__wrap_malloc>:
    0:	f3 0f 1e fa          	endbr64 
    4:	55                   	push   %rbp
-   5:	53                   	push   %rbx
-   6:	48 83 ec 08          	sub    $0x8,%rsp
-   a:	48 89 fb             	mov    %rdi,%rbx
-   d:	e8 00 00 00 00       	call   12 <__wrap_malloc+0x12>
-			e: R_X86_64_PLT32	__real_malloc-0x4
-  12:	48 89 c5             	mov    %rax,%rbp
-  15:	89 da                	mov    %ebx,%edx
-  17:	48 89 c1             	mov    %rax,%rcx
-  1a:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 21 <__wrap_malloc+0x21>
-			1d: R_X86_64_PC32	.LC0-0x4
-  21:	bf 01 00 00 00       	mov    $0x1,%edi
-  26:	b8 00 00 00 00       	mov    $0x0,%eax
-  2b:	e8 00 00 00 00       	call   30 <__wrap_malloc+0x30>
-			2c: R_X86_64_PLT32	__printf_chk-0x4
-  30:	48 89 e8             	mov    %rbp,%rax
-  33:	48 83 c4 08          	add    $0x8,%rsp
-  37:	5b                   	pop    %rbx
-  38:	5d                   	pop    %rbp
-  39:	c3                   	ret    
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	48 83 ec 20          	sub    $0x20,%rsp
+   c:	48 89 7d e8          	mov    %rdi,-0x18(%rbp)
+  10:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+  14:	48 89 c7             	mov    %rax,%rdi
+  17:	e8 00 00 00 00       	call   1c <__wrap_malloc+0x1c>
+			18: R_X86_64_PLT32	__real_malloc-0x4
+  1c:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  20:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+  24:	89 c1                	mov    %eax,%ecx
+  26:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  2a:	48 89 c2             	mov    %rax,%rdx
+  2d:	89 ce                	mov    %ecx,%esi
+  2f:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 36 <__wrap_malloc+0x36>
+			32: R_X86_64_PC32	.rodata-0x4
+  36:	48 89 c7             	mov    %rax,%rdi
+  39:	b8 00 00 00 00       	mov    $0x0,%eax
+  3e:	e8 00 00 00 00       	call   43 <__wrap_malloc+0x43>
+			3f: R_X86_64_PLT32	printf-0x4
+  43:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  47:	c9                   	leave  
+  48:	c3                   	ret    
 
-000000000000003a <__wrap_free>:
-  3a:	f3 0f 1e fa          	endbr64 
-  3e:	53                   	push   %rbx
-  3f:	48 89 fb             	mov    %rdi,%rbx
-  42:	e8 00 00 00 00       	call   47 <__wrap_free+0xd>
-			43: R_X86_64_PLT32	__real_free-0x4
-  47:	48 89 da             	mov    %rbx,%rdx
-  4a:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 51 <__wrap_free+0x17>
-			4d: R_X86_64_PC32	.LC1-0x4
-  51:	bf 01 00 00 00       	mov    $0x1,%edi
-  56:	b8 00 00 00 00       	mov    $0x0,%eax
-  5b:	e8 00 00 00 00       	call   60 <__wrap_free+0x26>
-			5c: R_X86_64_PLT32	__printf_chk-0x4
-  60:	5b                   	pop    %rbx
-  61:	c3                   	ret    
+0000000000000049 <__wrap_free>:
+  49:	f3 0f 1e fa          	endbr64 
+  4d:	55                   	push   %rbp
+  4e:	48 89 e5             	mov    %rsp,%rbp
+  51:	48 83 ec 10          	sub    $0x10,%rsp
+  55:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+  59:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  5d:	48 89 c7             	mov    %rax,%rdi
+  60:	e8 00 00 00 00       	call   65 <__wrap_free+0x1c>
+			61: R_X86_64_PLT32	__real_free-0x4
+  65:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  69:	48 89 c6             	mov    %rax,%rsi
+  6c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 73 <__wrap_free+0x2a>
+			6f: R_X86_64_PC32	.rodata+0xd
+  73:	48 89 c7             	mov    %rax,%rdi
+  76:	b8 00 00 00 00       	mov    $0x0,%eax
+  7b:	e8 00 00 00 00       	call   80 <__wrap_free+0x37>
+			7c: R_X86_64_PLT32	printf-0x4
+  80:	90                   	nop
+  81:	c9                   	leave  
+  82:	c3                   	ret    
 
-Disassembly of section .rodata.str1.1:
+Disassembly of section .rodata:
 
-0000000000000000 <.LC0>:
+0000000000000000 <.rodata>:
    0:	6d                   	insl   (%dx),%es:(%rdi)
    1:	61                   	(bad)  
    2:	6c                   	insb   (%dx),%es:(%rdi)
@@ -87,11 +95,9 @@ Disassembly of section .rodata.str1.1:
    4:	6f                   	outsl  %ds:(%rsi),(%dx)
    5:	63 28                	movsxd (%rax),%ebp
    7:	25 64 29 20 3d       	and    $0x3d202964,%eax
-   c:	20 25 70 0a 00     	and    %ah,0x66000a70(%rip)        # 66000a82 <__wrap_free+0x66000a48>
-
-0000000000000011 <.LC1>:
-  11:	66 72 65             	data16 jb 79 <__wrap_free+0x3f>
-  14:	65 28 25 70 29 0a 00 	sub    %ah,%gs:0xa2970(%rip)        # a298b <__wrap_free+0xa2951>
+   c:	20 25 70 0a 00 66    	and    %ah,0x66000a70(%rip)        # 66000a82 <__wrap_free+0x66000a39>
+  12:	72 65                	jb     79 <__wrap_free+0x30>
+  14:	65 28 25 70 29 0a 00 	sub    %ah,%gs:0xa2970(%rip)        # a298b <__wrap_free+0xa2942>
 
 Disassembly of section .comment:
 
@@ -99,14 +105,14 @@ Disassembly of section .comment:
    0:	00 47 43             	add    %al,0x43(%rdi)
    3:	43 3a 20             	rex.XB cmp (%r8),%spl
    6:	28 55 62             	sub    %dl,0x62(%rbp)
-   9:	75 6e                	jne    79 <__wrap_free+0x3f>
-   b:	74 75                	je     82 <__wrap_free+0x48>
+   9:	75 6e                	jne    79 <__wrap_free+0x30>
+   b:	74 75                	je     82 <__wrap_free+0x39>
    d:	20 31                	and    %dh,(%rcx)
    f:	31 2e                	xor    %ebp,(%rsi)
   11:	34 2e                	xor    $0x2e,%al
-  13:	30 2d 31 75 62 75    	xor    %ch,0x75627531(%rip)        # 7562754a <__wrap_free+0x75627510>
+  13:	30 2d 31 75 62 75    	xor    %ch,0x75627531(%rip)        # 7562754a <__wrap_free+0x75627501>
   19:	6e                   	outsb  %ds:(%rsi),(%dx)
-  1a:	74 75                	je     91 <__wrap_free+0x57>
+  1a:	74 75                	je     91 <__wrap_free+0x48>
   1c:	31 7e 32             	xor    %edi,0x32(%rsi)
   1f:	32 2e                	xor    (%rsi),%ch
   21:	30 34 29             	xor    %dh,(%rcx,%rbp,1)
@@ -145,35 +151,32 @@ Disassembly of section .eh_frame:
    d:	78 10                	js     1f <.eh_frame+0x1f>
    f:	01 1b                	add    %ebx,(%rbx)
   11:	0c 07                	or     $0x7,%al
-  13:	08 90 01 00 00 24    	or     %dl,0x24000001(%rax)
+  13:	08 90 01 00 00 1c    	or     %dl,0x1c000001(%rax)
   19:	00 00                	add    %al,(%rax)
   1b:	00 1c 00             	add    %bl,(%rax,%rax,1)
   1e:	00 00                	add    %al,(%rax)
   20:	00 00                	add    %al,(%rax)
 			20: R_X86_64_PC32	.text
   22:	00 00                	add    %al,(%rax)
-  24:	3a 00                	cmp    (%rax),%al
-  26:	00 00                	add    %al,(%rax)
-  28:	00 45 0e             	add    %al,0xe(%rbp)
-  2b:	10 86 02 41 0e 18    	adc    %al,0x180e4102(%rsi)
-  31:	83 03 44             	addl   $0x44,(%rbx)
-  34:	0e                   	(bad)  
-  35:	20 6d 0e             	and    %ch,0xe(%rbp)
-  38:	18 41 0e             	sbb    %al,0xe(%rcx)
-  3b:	10 41 0e             	adc    %al,0xe(%rcx)
-  3e:	08 00                	or     %al,(%rax)
-  40:	1c 00                	sbb    $0x0,%al
+  24:	49 00 00             	rex.WB add %al,(%r8)
+  27:	00 00                	add    %al,(%rax)
+  29:	45 0e                	rex.RB (bad) 
+  2b:	10 86 02 43 0d 06    	adc    %al,0x60d4302(%rsi)
+  31:	02 40 0c             	add    0xc(%rax),%al
+  34:	07                   	(bad)  
+  35:	08 00                	or     %al,(%rax)
+  37:	00 1c 00             	add    %bl,(%rax,%rax,1)
+  3a:	00 00                	add    %al,(%rax)
+  3c:	3c 00                	cmp    $0x0,%al
+  3e:	00 00                	add    %al,(%rax)
+  40:	00 00                	add    %al,(%rax)
+			40: R_X86_64_PC32	.text+0x49
   42:	00 00                	add    %al,(%rax)
-  44:	44 00 00             	add    %r8b,(%rax)
-  47:	00 00                	add    %al,(%rax)
-			48: R_X86_64_PC32	.text+0x3a
-  49:	00 00                	add    %al,(%rax)
-  4b:	00 28                	add    %ch,(%rax)
-  4d:	00 00                	add    %al,(%rax)
-  4f:	00 00                	add    %al,(%rax)
-  51:	45 0e                	rex.RB (bad) 
-  53:	10 83 02 62 0e 08    	adc    %al,0x80e6202(%rbx)
-  59:	00 00                	add    %al,(%rax)
-  5b:	00 00                	add    %al,(%rax)
-  5d:	00 00                	add    %al,(%rax)
+  44:	3a 00                	cmp    (%rax),%al
+  46:	00 00                	add    %al,(%rax)
+  48:	00 45 0e             	add    %al,0xe(%rbp)
+  4b:	10 86 02 43 0d 06    	adc    %al,0x60d4302(%rsi)
+  51:	71 0c                	jno    5f <__wrap_free+0x16>
+  53:	07                   	(bad)  
+  54:	08 00                	or     %al,(%rax)
 	...

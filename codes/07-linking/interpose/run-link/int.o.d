@@ -7,24 +7,26 @@ start address 0x0000000000000000
 
 Sections:
 Idx Name          Size      VMA               LMA               File off  Algn
-  0 .text         0000000a  0000000000000000  0000000000000000  00000040  2**0
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  0000000000000000  0000000000000000  0000004a  2**0
+  0 .text         0000002d  0000000000000000  0000000000000000  00000040  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000000  0000000000000000  0000000000000000  0000006d  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000000  0000000000000000  0000000000000000  0000004a  2**0
+  2 .bss          00000000  0000000000000000  0000000000000000  0000006d  2**0
                   ALLOC
-  3 .comment      0000002c  0000000000000000  0000000000000000  0000004a  2**0
+  3 .comment      0000002c  0000000000000000  0000000000000000  0000006d  2**0
                   CONTENTS, READONLY
-  4 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00000076  2**0
+  4 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00000099  2**0
                   CONTENTS, READONLY
-  5 .note.gnu.property 00000020  0000000000000000  0000000000000000  00000078  2**3
+  5 .note.gnu.property 00000020  0000000000000000  0000000000000000  000000a0  2**3
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  6 .eh_frame     00000030  0000000000000000  0000000000000000  00000098  2**3
+  6 .eh_frame     00000038  0000000000000000  0000000000000000  000000c0  2**3
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
 SYMBOL TABLE:
 0000000000000000 l    df *ABS*	0000000000000000 int.c
 0000000000000000 l    d  .text	0000000000000000 .text
-0000000000000000 g     F .text	000000000000000a main
+0000000000000000 g     F .text	000000000000002d main
+0000000000000000         *UND*	0000000000000000 malloc
+0000000000000000         *UND*	0000000000000000 free
 
 
 
@@ -32,8 +34,20 @@ Disassembly of section .text:
 
 0000000000000000 <main>:
    0:	f3 0f 1e fa          	endbr64 
-   4:	b8 00 00 00 00       	mov    $0x0,%eax
-   9:	c3                   	ret    
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	48 83 ec 10          	sub    $0x10,%rsp
+   c:	bf 20 00 00 00       	mov    $0x20,%edi
+  11:	e8 00 00 00 00       	call   16 <main+0x16>
+			12: R_X86_64_PLT32	malloc-0x4
+  16:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  1a:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  1e:	48 89 c7             	mov    %rax,%rdi
+  21:	e8 00 00 00 00       	call   26 <main+0x26>
+			22: R_X86_64_PLT32	free-0x4
+  26:	b8 00 00 00 00       	mov    $0x0,%eax
+  2b:	c9                   	leave  
+  2c:	c3                   	ret    
 
 Disassembly of section .comment:
 
@@ -87,12 +101,16 @@ Disassembly of section .eh_frame:
    d:	78 10                	js     1f <.eh_frame+0x1f>
    f:	01 1b                	add    %ebx,(%rbx)
   11:	0c 07                	or     $0x7,%al
-  13:	08 90 01 00 00 14    	or     %dl,0x14000001(%rax)
+  13:	08 90 01 00 00 1c    	or     %dl,0x1c000001(%rax)
   19:	00 00                	add    %al,(%rax)
   1b:	00 1c 00             	add    %bl,(%rax,%rax,1)
   1e:	00 00                	add    %al,(%rax)
   20:	00 00                	add    %al,(%rax)
 			20: R_X86_64_PC32	.text
   22:	00 00                	add    %al,(%rax)
-  24:	0a 00                	or     (%rax),%al
+  24:	2d 00 00 00 00       	sub    $0x0,%eax
+  29:	45 0e                	rex.RB (bad) 
+  2b:	10 86 02 43 0d 06    	adc    %al,0x60d4302(%rsi)
+  31:	64 0c 07             	fs or  $0x7,%al
+  34:	08 00                	or     %al,(%rax)
 	...
