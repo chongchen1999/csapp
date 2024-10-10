@@ -19,6 +19,7 @@
         "string": "c",
         "unordered_map": "c",
         "vector": "c",
-        "link-time.h": "c"
+        "link-time.h": "c",
+        "limits.h": "c"
     }
 }
