@@ -1,0 +1,13 @@
+
+cread.o-O2:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <cread>:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	31 c0                	xor    %eax,%eax
+   6:	48 85 ff             	test   %rdi,%rdi
+   9:	74 03                	je     e <cread+0xe>
+   b:	48 8b 07             	mov    (%rdi),%rax
+   e:	c3                   	ret    

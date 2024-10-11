@@ -1,0 +1,16 @@
+
+abs-diff.o-Og:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <absdiff>:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	48 39 f7             	cmp    %rsi,%rdi
+   7:	7d 07                	jge    10 <absdiff+0x10>
+   9:	48 89 f0             	mov    %rsi,%rax
+   c:	48 29 f8             	sub    %rdi,%rax
+   f:	c3                   	ret    
+  10:	48 89 f8             	mov    %rdi,%rax
+  13:	48 29 f0             	sub    %rsi,%rax
+  16:	c3                   	ret    
