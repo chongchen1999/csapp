@@ -9,5 +9,6 @@ long top(long x) {
 int main() {
     long result = top(100);
     // The result may be used here in further code
-    return 0;
+
+    return result;
 }
