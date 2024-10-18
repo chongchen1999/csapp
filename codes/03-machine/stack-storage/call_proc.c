@@ -20,3 +20,7 @@ long call_proc() {
 
     return (x1 + x2) * (x3 - x4);
 }
+
+int main() {
+    return call_proc();
+}
