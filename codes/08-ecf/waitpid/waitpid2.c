@@ -15,14 +15,14 @@ void unix_error(const char *msg) {
 
 int main() {
     int status, i;
-    pid_t pid;
+    pid_t pid[N], retpid;
 
     // Seed random number generator
     srand(233);
 
     // Parent creates N children
     for (i = 0; i < N; i++) {
-        if ((pid = fork()) == 0) {
+        if ((pid[i] = fork()) == 0) {
             // printf("Child %d created\n", i + 1);
             // Child process
             int sleep_time = N - i;  // Sleep for 1 to 5 seconds
@@ -35,13 +35,14 @@ int main() {
     }
 
     printf("Parent created all children\n");
+    i = 0;
 
     // Parent reaps N children in no particular order
-    while ((pid = waitpid(-1, &status, 0)) > 0) {
+    while ((retpid = waitpid(pid[i++], &status, 0)) > 0) {
         if (WIFEXITED(status)) {
-            printf("Child %d terminated normally with exit status=%d\n", pid, WEXITSTATUS(status));
+            printf("Child %d terminated normally with exit status=%d\n", retpid, WEXITSTATUS(status));
         } else {
-            printf("Child %d terminated abnormally\n", pid);
+            printf("Child %d terminated abnormally\n", retpid);
         }
     }
 

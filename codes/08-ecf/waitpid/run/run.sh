@@ -1,2 +1,3 @@
 gcc -o waitpid1 ../waitpid1.c
-./waitpid1
+gcc -o waitpid2 ../waitpid2.c
+./waitpid2
